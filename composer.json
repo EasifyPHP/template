@@ -1,0 +1,35 @@
+{
+  "name": "easifyphp/template",
+  "description": "A template for all EasifyPHP packages.",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Easifyphp\\Template\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Mark",
+      "email": "hello@mmark.me"
+    }
+  ],
+  "require": {
+    "php": "^8.2"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.16",
+    "pestphp/pest": "^2.6",
+    "roave/security-advisories": "dev-latest"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    },
+    "sort-packages": true
+  },
+  "scripts": {
+    "test": "pest",
+    "fix": "php-cs-fixer fix"
+  }
+}

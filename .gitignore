@@ -1,0 +1,15 @@
+### PHP-CS-Fixer
+# Covers PHP CS Fixer
+# References: https://cs.symfony.com/ , https://cs.symfony.com/doc/config.html
+# Generated files
+.php-cs-fixer.cache
+# Local config
+.php-cs-fixer.php
+
+### Composer
+composer.phar
+/vendor/
+composer.lock
+
+### JetBrains IDEs
+/.idea/
