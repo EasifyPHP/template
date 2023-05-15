@@ -1,13 +1,8 @@
 {
   "name": "easifyphp/template",
   "description": "A template for all EasifyPHP packages.",
-  "type": "library",
   "license": "MIT",
-  "autoload": {
-    "psr-4": {
-      "Easifyphp\\Template\\": "src/"
-    }
-  },
+  "type": "library",
   "authors": [
     {
       "name": "Mark",
@@ -15,24 +10,39 @@
     }
   ],
   "require": {
-    "php": "^8.2"
+    "php": ">=8.2"
   },
   "require-dev": {
+    "ergebnis/composer-normalize": "^2.31",
     "fakerphp/faker": "^1.21",
     "friendsofphp/php-cs-fixer": "^3.16",
     "jetbrains/phpstorm-attributes": "^1.0",
     "pestphp/pest": "^2.6",
-    "roave/security-advisories": "dev-latest"
+    "roave/security-advisories": "dev-latest",
+    "symfony/var-dumper": "^6.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Easifyphp\\Template\\": "src/"
+    }
   },
   "config": {
     "allow-plugins": {
-      "pestphp/pest-plugin": true
+      "pestphp/pest-plugin": true,
+      "ergebnis/composer-normalize": true
     },
     "sort-packages": true
   },
+  "extra": {
+    "composer-normalize": {
+      "indent-size": 2,
+      "indent-style": "space"
+    }
+  },
   "scripts": {
+    "post-autoload-dump": "composer normalize",
+    "fix": "php-cs-fixer fix",
     "test": "pest",
-    "test:coverage": "pest --coverage --min=90",
-    "fix": "php-cs-fixer fix"
+    "test:coverage": "pest --coverage --min=90"
   }
 }

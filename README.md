@@ -8,7 +8,7 @@ This is a template for all EasifyPHP packages. It provides a starting point to c
 
 - PSR-4 autoloading.
 - PHP 8.2+ requirement.
-- Pre-configured for use with PHP CS Fixer, Pest, Faker, JetBrains PhpStorm Attributes, and Roave Security Advisories.
+- Pre-configured for use with PHP CS Fixer, Pest, Faker, JetBrains PhpStorm Attributes, Composer Normalize, Symfony VarDumper, and Roave Security Advisories.
 - Scripts for testing, test coverage, and code fixing.
 
 ## Installation
@@ -41,6 +41,12 @@ function getEntityData(): array
 {
     // ...
 }
+```
+
+The template also includes the [Symfony VarDumper](https://github.com/symfony/var-dumper) package. This package provides a better `var_dump()` function that is easier to read and understand.
+
+```php
+dump($data);
 ```
 
 Please refer to the package documentation for more details on how to use it effectively in your project.
