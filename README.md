@@ -8,7 +8,7 @@ This is a template for all EasifyPHP packages. It provides a starting point to c
 
 - PSR-4 autoloading.
 - PHP 8.2+ requirement.
-- Pre-configured for use with PHP CS Fixer, Pest, Faker, and Roave Security Advisories.
+- Pre-configured for use with PHP CS Fixer, Pest, Faker, JetBrains PhpStorm Attributes, and Roave Security Advisories.
 - Scripts for testing, test coverage, and code fixing.
 
 ## Installation
@@ -30,6 +30,20 @@ $faker = Faker\Factory::create();
 
 $name = $faker->name();
 ```
+
+Additionally, the template includes the [JetBrains PhpStorm Attributes](https://github.com/JetBrains/phpstorm-attributes) package. This package provides additional syntax support when you're using JetBrains PhpStorm as your IDE.
+
+```php
+use JetBrains\PhpStorm\ArrayShape;
+
+#[ArrayShape(['id' => 'int', 'name' => 'string'])]
+function getEntityData(): array
+{
+    // ...
+}
+```
+
+Please refer to the package documentation for more details on how to use it effectively in your project.
 
 ## Testing
 
