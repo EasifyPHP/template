@@ -8,7 +8,7 @@ This is a template for all EasifyPHP packages. It provides a starting point to c
 
 - PSR-4 autoloading.
 - PHP 8.2+ requirement.
-- Pre-configured for use with PHP CS Fixer, Pest, and Roave Security Advisories.
+- Pre-configured for use with PHP CS Fixer, Pest, Faker, and Roave Security Advisories.
 - Scripts for testing, test coverage, and code fixing.
 
 ## Installation
@@ -22,6 +22,14 @@ composer require easifyphp/template
 ## Usage
 
 After installing, replace the namespace `Easifyphp\Template` with the namespace you prefer. The source files should be placed in the `src/` directory.
+
+The template includes [Faker](https://github.com/FakerPHP/Faker) for generating fake data in your tests or seed scripts. You can use it like so:
+
+```php
+$faker = Faker\Factory::create();
+
+$name = $faker->name();
+```
 
 ## Testing
 
