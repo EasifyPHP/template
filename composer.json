@@ -52,7 +52,7 @@
     "post-create-project-cmd": [
       "Easifyphp\\Template\\Setup::setup",
       "@composer update",
-      "@php -r \"!file_exists('interactive_questions.php') || unlink('interactive_questions.php');\""
+      "Easifyphp\\Template\\Setup::unlink"
     ]
   }
 }

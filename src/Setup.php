@@ -8,7 +8,7 @@ class Setup
     {
 
         echo 'Package name: ';
-        $packageName = strtolower(trim(fgets(STDIN)));
+        $packageName = strtolower(trim(stream_get_line(STDIN, 0, PHP_EOL)));
         $matches = [];
         if (!preg_match('/(^[a-z0-9][_.-]?[a-z0-9]+)*\/([a-z0-9]([_.]|-{1,2})?[a-z0-9]+)*$/', $packageName, $matches)) {
             echo "Package name must be in the format vendor/package\n";
@@ -18,10 +18,10 @@ class Setup
         [$vendor, $package] = array_map('ucfirst', $matches);
 
         echo 'Description: ';
-        $description = trim(fgets(STDIN));
+        $description = trim(stream_get_line(STDIN, 0, PHP_EOL));
 
         echo 'License [MIT]: ';
-        $license = trim(fgets(STDIN));
+        $license = trim(stream_get_line(STDIN, 0, PHP_EOL));
         if (empty($license)) {
             $license = 'MIT';
         }
@@ -31,7 +31,7 @@ class Setup
         }
 
         echo 'Type [library]: ';
-        $type = trim(fgets(STDIN));
+        $type = trim(stream_get_line(STDIN, 0, PHP_EOL));
         if (empty($type)) {
             $type = 'library';
         }
@@ -41,7 +41,7 @@ class Setup
         }
 
         echo 'Minimum PHP version [8.2]: ';
-        $phpVersion = trim(fgets(STDIN));
+        $phpVersion = trim(stream_get_line(STDIN, 0, PHP_EOL));
         if (empty($phpVersion)) {
             $phpVersion = '8.2';
         }
@@ -51,10 +51,10 @@ class Setup
         }
 
         echo 'Author name: ';
-        $authorName = trim(fgets(STDIN));
+        $authorName = trim(stream_get_line(STDIN, 0, PHP_EOL));
 
         echo 'Author email: ';
-        $authorEmail = trim(fgets(STDIN));
+        $authorEmail = trim(stream_get_line(STDIN, 0, PHP_EOL));
 
         $template = file_get_contents('composer.json');
         $data = json_decode($template, true);
