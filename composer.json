@@ -2,7 +2,7 @@
   "name": "easifyphp/template",
   "description": "A template for all EasifyPHP packages.",
   "license": "MIT",
-  "type": "library",
+  "type": "project",
   "authors": [
     {
       "name": "Mark",

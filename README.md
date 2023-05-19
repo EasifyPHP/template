@@ -2,13 +2,15 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This is a template for all EasifyPHP packages. It provides a starting point to create a library that follows modern PHP standards.
+This is a template for all EasifyPHP packages. It provides a starting point to create a library that follows modern PHP
+standards.
 
 ## Features
 
 - PSR-4 autoloading.
 - PHP 8.2+ requirement.
-- Pre-configured for use with PHP CS Fixer, Pest, Faker, JetBrains PhpStorm Attributes, Composer Normalize, Symfony VarDumper, and Roave Security Advisories.
+- Pre-configured for use with PHP CS Fixer, Pest, Faker, JetBrains PhpStorm Attributes, Composer Normalize, Symfony
+  VarDumper, and Roave Security Advisories.
 - Scripts for testing, test coverage, and code fixing.
 
 ## Installation
@@ -16,14 +18,16 @@ This is a template for all EasifyPHP packages. It provides a starting point to c
 Use [Composer](https://getcomposer.org/) to install this template.
 
 ```bash
-composer require easifyphp/template
+composer create-project easifyphp/template
 ```
 
 ## Usage
 
-After installing, replace the namespace `Easifyphp\Template` with the namespace you prefer. The source files should be placed in the `src/` directory.
+After installing, replace the namespace `Easifyphp\Template` with the namespace you prefer. The source files should be
+placed in the `src/` directory.
 
-The template includes [Faker](https://github.com/FakerPHP/Faker) for generating fake data in your tests or seed scripts. You can use it like so:
+The template includes [Faker](https://github.com/FakerPHP/Faker) for generating fake data in your tests or seed scripts.
+You can use it like so:
 
 ```php
 $faker = Faker\Factory::create();
@@ -31,7 +35,9 @@ $faker = Faker\Factory::create();
 $name = $faker->name();
 ```
 
-Additionally, the template includes the [JetBrains PhpStorm Attributes](https://github.com/JetBrains/phpstorm-attributes) package. This package provides additional syntax support when you're using JetBrains PhpStorm as your IDE.
+Additionally, the template includes
+the [JetBrains PhpStorm Attributes](https://github.com/JetBrains/phpstorm-attributes) package. This package provides
+additional syntax support when you're using JetBrains PhpStorm as your IDE.
 
 ```php
 use JetBrains\PhpStorm\ArrayShape;
@@ -43,7 +49,8 @@ function getEntityData(): array
 }
 ```
 
-The template also includes the [Symfony VarDumper](https://github.com/symfony/var-dumper) package. This package provides a better `var_dump()` function that is easier to read and understand.
+The template also includes the [Symfony VarDumper](https://github.com/symfony/var-dumper) package. This package provides
+a better `var_dump()` function that is easier to read and understand.
 
 ```php
 dump($data);
@@ -81,7 +88,8 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within this template, please send an e-mail to Mark via [hello@mmark.me](mailto:hello@mmark.me). All security vulnerabilities will be promptly addressed.
+If you discover a security vulnerability within this template, please send an e-mail to Mark
+via [hello@mmark.me](mailto:hello@mmark.me). All security vulnerabilities will be promptly addressed.
 
 ## License
 
