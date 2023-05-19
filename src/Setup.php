@@ -8,7 +8,7 @@ class Setup
     {
 
         echo 'Package name: ';
-        $packageName = strtolower(trim(stream_get_line(STDIN, 0, PHP_EOL)));
+        $packageName = strtolower(trim(fgets(STDIN)));
         $matches = [];
         if (!preg_match('/(^[a-z0-9][_.-]?[a-z0-9]+)*\/([a-z0-9]([_.]|-{1,2})?[a-z0-9]+)*$/', $packageName, $matches)) {
             echo "Package name must be in the format vendor/package\n";
@@ -18,10 +18,10 @@ class Setup
         [$vendor, $package] = array_map('ucfirst', $matches);
 
         echo 'Description: ';
-        $description = trim(stream_get_line(STDIN, 0, PHP_EOL));
+        $description = trim(fgets(STDIN));
 
         echo 'License [MIT]: ';
-        $license = trim(stream_get_line(STDIN, 0, PHP_EOL));
+        $license = trim(fgets(STDIN));
         if (empty($license)) {
             $license = 'MIT';
         }
@@ -31,7 +31,7 @@ class Setup
         }
 
         echo 'Type [library]: ';
-        $type = trim(stream_get_line(STDIN, 0, PHP_EOL));
+        $type = trim(fgets(STDIN));
         if (empty($type)) {
             $type = 'library';
         }
@@ -41,7 +41,7 @@ class Setup
         }
 
         echo 'Minimum PHP version [8.2]: ';
-        $phpVersion = trim(stream_get_line(STDIN, 0, PHP_EOL));
+        $phpVersion = trim(fgets(STDIN));
         if (empty($phpVersion)) {
             $phpVersion = '8.2';
         }
@@ -51,10 +51,18 @@ class Setup
         }
 
         echo 'Author name: ';
-        $authorName = trim(stream_get_line(STDIN, 0, PHP_EOL));
+        $authorName = trim(fgets(STDIN));
+        if (!empty($authorName) && !preg_match('/^[a-zA-Z\s-]+$/', $authorName)) {
+            echo "Author name must contain only [a-zA-Z] letters, spaces, and dashes\n";
+            exit(1);
+        }
 
         echo 'Author email: ';
-        $authorEmail = trim(stream_get_line(STDIN, 0, PHP_EOL));
+        $authorEmail = trim(fgets(STDIN));
+        if (!empty($authorEmail) && !filter_var($authorEmail, FILTER_VALIDATE_EMAIL)) {
+            echo "Author email must be a valid email address\n";
+            exit(1);
+        }
 
         $template = file_get_contents('composer.json');
         $data = json_decode($template, true);
@@ -70,6 +78,16 @@ class Setup
                 'email' => $authorEmail,
             ],
         ];
+
+        if (empty($description)) {
+            unset($data['description']);
+        }
+        if (empty($authorName)) {
+            unset($data['authors'][0]['name']);
+        }
+        if (empty($authorEmail)) {
+            unset($data['authors'][0]['email']);
+        }
 
         $data['autoload']['psr-4'] = [
             $vendor.'\\'.$package.'\\' => 'src/',

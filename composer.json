@@ -51,7 +51,7 @@
     "test:coverage": "pest --coverage --min=90",
     "post-create-project-cmd": [
       "Easifyphp\\Template\\Setup::setup",
-      "@composer update",
+      "@composer dump-autoload",
       "Easifyphp\\Template\\Setup::unlink"
     ]
   }
