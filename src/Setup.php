@@ -56,7 +56,7 @@ class Setup
         echo 'Author email: ';
         $authorEmail = trim(fgets(STDIN));
 
-        $template = file_get_contents('../composer.json');
+        $template = file_get_contents('composer.json');
         $data = json_decode($template, true);
 
         $data['name'] = $packageName;
@@ -81,7 +81,7 @@ class Setup
         unset($data['scripts']['post-create-project-cmd']);
 
         $newComposerJson = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        file_put_contents('../composer.json', $newComposerJson);
+        file_put_contents('composer.json', $newComposerJson);
 
     }
 
