@@ -26,6 +26,11 @@
       "Easifyphp\\Template\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Easifyphp\\Template\\Test\\": "tests/"
+    }
+  },
   "config": {
     "allow-plugins": {
       "pestphp/pest-plugin": true,
@@ -43,6 +48,11 @@
     "post-autoload-dump": "composer normalize",
     "fix": "php-cs-fixer fix",
     "test": "pest",
-    "test:coverage": "pest --coverage --min=90"
+    "test:coverage": "pest --coverage --min=90",
+    "post-create-project-cmd": [
+      "@php interactive_questions.php",
+      "@composer update",
+      "@php -r \"!file_exists('interactive_questions.php') || unlink('interactive_questions.php');\""
+    ]
   }
 }
