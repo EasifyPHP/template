@@ -28,7 +28,7 @@ class Setup
 
     private static function getPackageName(): string
     {
-        return self::prompt('Package name: ', '/(^[a-z0-9][_.-]?[a-z0-9]+)*\/([a-z0-9]([_.]|-{1,2})?[a-z0-9]+)*$/', 'Package name must be in the format vendor/package');
+        return self::prompt('Package name', '/(^[a-z0-9][_.-]?[a-z0-9]+)*\/([a-z0-9]([_.]|-{1,2})?[a-z0-9]+)*$/', 'Package name must be in the format vendor/package');
     }
 
     private static function getVendorAndPackage(string $packageName): array
@@ -41,10 +41,10 @@ class Setup
     {
         return [
             'name' => $packageName,
-            'type' => self::prompt('Type [library]: ', '/^[a-z0-9-]+$/', 'Type must be a valid composer package type', 'library'),
-            'description' => self::prompt('Description: '),
-            'license' => self::prompt('License [MIT]: ', '/^[a-zA-Z0-9\-.+]+$/', 'License must be a valid SPDX identifier', 'MIT'),
-            'require' => ['php' => '>='.self::prompt('Minimum PHP version [8.2]: ', '/^\d+\.\d+$/', 'PHP version must be in the format x.y', '8.2')],
+            'type' => self::prompt('Type', '/^[a-z0-9-]+$/', 'Type must be a valid composer package type', 'library'),
+            'description' => self::prompt('Description'),
+            'license' => self::prompt('License', '/^[a-zA-Z0-9\-.+]+$/', 'License must be a valid SPDX identifier', 'MIT'),
+            'require' => ['php' => '>='.self::prompt('Minimum PHP version', '/^\d+\.\d+$/', 'PHP version must be in the format x.y', '8.2')],
             'authors' => [],
         ];
     }
@@ -63,7 +63,7 @@ class Setup
 
     private static function getAuthorName(): string
     {
-        $authorName = self::prompt('Author name: ');
+        $authorName = self::prompt('Author name');
 
         if (!preg_match('/^[a-zA-Z\s-]+$/', $authorName)) {
             self::error('Author name must contain only [a-zA-Z] letters, spaces, and dashes');
@@ -74,7 +74,7 @@ class Setup
 
     private static function getAuthorEmail(): string
     {
-        $authorEmail = self::prompt('Author email: ');
+        $authorEmail = self::prompt('Author email');
 
         if (!filter_var($authorEmail, FILTER_VALIDATE_EMAIL)) {
             self::error('Author email must be a valid email address');
