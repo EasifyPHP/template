@@ -46,13 +46,13 @@
   },
   "scripts": {
     "post-autoload-dump": "composer normalize",
-    "fix": "php-cs-fixer fix",
-    "test": "pest",
-    "test:coverage": "pest --coverage --min=90",
     "post-create-project-cmd": [
       "Easifyphp\\Template\\Setup::setup",
       "@composer update",
       "Easifyphp\\Template\\Setup::unlink"
-    ]
+    ],
+    "fix": "php-cs-fixer fix",
+    "test": "pest",
+    "test:coverage": "pest --coverage --min=90"
   }
 }
