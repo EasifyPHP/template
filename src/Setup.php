@@ -31,7 +31,7 @@ class Setup
 
         self::removeUnwantedScripts($composerJsonData);
 
-        $composerJsonData = array_merge_recursive($template, $composerJsonData);
+        $composerJsonData = [...$template, ...$composerJsonData];
 
         self::writeComposerJson($composerJsonData);
     }
