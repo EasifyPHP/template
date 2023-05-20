@@ -2,105 +2,136 @@
 
 namespace Easifyphp\Template;
 
+use JetBrains\PhpStorm\ArrayShape;
+use JetBrains\PhpStorm\NoReturn;
+
 class Setup
 {
     public static function setup()
     {
+        $packageName = self::getPackageName();
 
-        echo 'Package name: ';
-        $packageName = strtolower(trim(fgets(STDIN)));
-        $matches = [];
-        if (!preg_match('/(^[a-z0-9][_.-]?[a-z0-9]+)*\/([a-z0-9]([_.]|-{1,2})?[a-z0-9]+)*$/', $packageName, $matches)) {
-            echo "Package name must be in the format vendor/package\n";
-            exit(1);
-        }
-        array_shift($matches);
-        [$vendor, $package] = array_map('ucfirst', $matches);
+        [$vendor, $package] = self::getVendorAndPackage($packageName);
 
-        echo 'Description: ';
-        $description = trim(fgets(STDIN));
+        $composerJsonData = self::getComposerJsonData($packageName);
 
-        echo 'License [MIT]: ';
-        $license = trim(fgets(STDIN));
-        if (empty($license)) {
-            $license = 'MIT';
-        }
-        if (!preg_match('/^[a-zA-Z0-9\-.+]+$/', $license)) {
-            echo "License must be a valid SPDX identifier\n";
-            exit(1);
-        }
+        $authorData = self::getAuthorData();
 
-        echo 'Type [library]: ';
-        $type = trim(fgets(STDIN));
-        if (empty($type)) {
-            $type = 'library';
-        }
-        if (!preg_match('/^[a-z0-9-]+$/', $type)) {
-            echo "Type must be a valid composer package type\n";
-            exit(1);
-        }
+        $composerJsonData['authors'][0] = $authorData;
 
-        echo 'Minimum PHP version [8.2]: ';
-        $phpVersion = trim(fgets(STDIN));
-        if (empty($phpVersion)) {
-            $phpVersion = '8.2';
-        }
-        if (!preg_match('/^\d+\.\d+$/', $phpVersion)) {
-            echo "PHP version must be in the format x.y\n";
-            exit(1);
-        }
+        self::setAutoloadPaths($composerJsonData, $vendor, $package);
 
-        echo 'Author name: ';
-        $authorName = trim(fgets(STDIN));
-        if (!empty($authorName) && !preg_match('/^[a-zA-Z\s-]+$/', $authorName)) {
-            echo "Author name must contain only [a-zA-Z] letters, spaces, and dashes\n";
-            exit(1);
-        }
+        self::removeUnwantedScripts($composerJsonData);
 
-        echo 'Author email: ';
-        $authorEmail = trim(fgets(STDIN));
-        if (!empty($authorEmail) && !filter_var($authorEmail, FILTER_VALIDATE_EMAIL)) {
-            echo "Author email must be a valid email address\n";
-            exit(1);
-        }
+        self::writeComposerJson($composerJsonData);
+    }
 
-        $template = file_get_contents('composer.json');
-        $data = json_decode($template, true);
+    private static function getPackageName(): string
+    {
+        return self::prompt('Package name: ', '/(^[a-z0-9][_.-]?[a-z0-9]+)*\/([a-z0-9]([_.]|-{1,2})?[a-z0-9]+)*$/', 'Package name must be in the format vendor/package');
+    }
 
-        $data['name'] = $packageName;
-        $data['description'] = $description;
-        $data['license'] = $license;
-        $data['type'] = $type;
-        $data['require']['php'] = '>='.$phpVersion;
-        $data['authors'] = [
-            [
-                'name' => $authorName,
-                'email' => $authorEmail,
-            ],
+    private static function getVendorAndPackage(string $packageName): array
+    {
+        return array_map('ucfirst', explode('/', $packageName));
+    }
+
+    #[ArrayShape(['name' => 'string', 'type' => 'string', 'description' => 'string', 'license' => 'string', 'require' => 'string[]', 'authors' => 'array'])]
+    private static function getComposerJsonData(string $packageName): array
+    {
+        return [
+            'name' => $packageName,
+            'type' => self::prompt('Type [library]: ', '/^[a-z0-9-]+$/', 'Type must be a valid composer package type', 'library'),
+            'description' => self::prompt('Description: '),
+            'license' => self::prompt('License [MIT]: ', '/^[a-zA-Z0-9\-.+]+$/', 'License must be a valid SPDX identifier', 'MIT'),
+            'require' => ['php' => '>='.self::prompt('Minimum PHP version [8.2]: ', '/^\d+\.\d+$/', 'PHP version must be in the format x.y', '8.2')],
+            'authors' => [],
         ];
+    }
 
-        if (empty($description)) {
-            unset($data['description']);
-        }
-        if (empty($authorName)) {
-            unset($data['authors'][0]['name']);
-        }
-        if (empty($authorEmail)) {
-            unset($data['authors'][0]['email']);
+    #[ArrayShape(['name' => 'string', 'email' => 'string'])]
+    private static function getAuthorData(): array
+    {
+        $authorName = self::getAuthorName();
+        $authorEmail = self::getAuthorEmail();
+
+        return [
+            'name' => $authorName,
+            'email' => $authorEmail,
+        ];
+    }
+
+    private static function getAuthorName(): string
+    {
+        $authorName = self::prompt('Author name: ');
+
+        if (!preg_match('/^[a-zA-Z\s-]+$/', $authorName)) {
+            self::error('Author name must contain only [a-zA-Z] letters, spaces, and dashes');
         }
 
-        $data['autoload']['psr-4'] = [
+        return $authorName;
+    }
+
+    private static function getAuthorEmail(): string
+    {
+        $authorEmail = self::prompt('Author email: ');
+
+        if (!filter_var($authorEmail, FILTER_VALIDATE_EMAIL)) {
+            self::error('Author email must be a valid email address');
+        }
+
+        return $authorEmail;
+    }
+
+    private static function setAutoloadPaths(array &$composerJsonData, string $vendor, string $package)
+    {
+        $composerJsonData['autoload']['psr-4'] = [
             $vendor.'\\'.$package.'\\' => 'src/',
         ];
-        $data['autoload-dev']['psr-4'] = [
-            $vendor.'\\'.$package.'\\Tests\\' => 'tests/',
+        $composerJsonData['autoload-dev']['psr-4'] = [
+            $vendor.'\\'.$package.'\\Test\\' => 'tests/',
         ];
+    }
 
-        unset($data['scripts']['post-create-project-cmd']);
+    private static function removeUnwantedScripts(array &$composerJsonData)
+    {
+        unset($composerJsonData['scripts']['post-create-project-cmd']);
+    }
 
-        $newComposerJson = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        file_put_contents('composer.json', $newComposerJson);
+    private static function writeComposerJson(array $composerJsonData)
+    {
+        file_put_contents('composer.json', json_encode($composerJsonData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+    }
 
+    /**
+     * Prompt for user input and validate using regex
+     */
+    private static function prompt(string $question, ?string $regex = null, ?string $errorMessage = null, ?string $default = null): string
+    {
+        while (true) {
+            echo $question.($default ? " [{$default}]" : '').': ';
+            $input = trim(fgets(STDIN));
+
+            if (empty($input) && $default !== null) {
+                return $default;
+            }
+
+            if ($regex && !preg_match($regex, $input)) {
+                self::error($errorMessage);
+            } else {
+                return $input;
+            }
+        }
+    }
+
+    /**
+     * Display error message and exit
+     */
+    #[NoReturn]
+    private static function error(string $errorMessage)
+    {
+        echo $errorMessage."\n";
+        exit(1);
     }
 
     public static function unlink()
