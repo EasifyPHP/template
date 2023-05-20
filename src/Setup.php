@@ -29,9 +29,9 @@ class Setup
 
         self::setAutoloadPaths($composerJsonData, $vendor, $package);
 
-        self::removeUnwantedScripts($composerJsonData);
-
         $composerJsonData = [...$template, ...$composerJsonData];
+
+        self::removeUnwantedScripts($composerJsonData);
 
         self::writeComposerJson($composerJsonData);
     }
