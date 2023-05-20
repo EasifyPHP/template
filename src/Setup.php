@@ -3,12 +3,18 @@
 namespace Easifyphp\Template;
 
 use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\NoReturn;
 
 class Setup
 {
     public static function setup()
     {
+        $template = json_decode(file_get_contents('composer.json'), true);
+
+        if ($template === null) {
+            self::error('composer.json is not valid JSON');
+            exit(1);
+        }
+
         $packageName = self::getPackageName();
 
         [$vendor, $package] = self::getVendorAndPackage($packageName);
@@ -24,6 +30,8 @@ class Setup
         self::setAutoloadPaths($composerJsonData, $vendor, $package);
 
         self::removeUnwantedScripts($composerJsonData);
+
+        $composerJsonData = array_merge_recursive($template, $composerJsonData);
 
         self::writeComposerJson($composerJsonData);
     }
@@ -133,7 +141,6 @@ class Setup
     /**
      * Display error message and exit
      */
-    #[NoReturn]
     private static function error(string $errorMessage)
     {
         echo $errorMessage."\n";
