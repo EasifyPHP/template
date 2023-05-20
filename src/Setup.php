@@ -41,8 +41,8 @@ class Setup
     {
         return [
             'name' => $packageName,
-            'type' => self::prompt('Type', '/^[a-z0-9-]+$/', 'Type must be a valid composer package type', 'library'),
             'description' => self::prompt('Description'),
+            'type' => self::prompt('Type', '/^[a-z0-9-]+$/', 'Type must be a valid composer package type', 'library'),
             'license' => self::prompt('License', '/^[a-zA-Z0-9\-.+]+$/', 'License must be a valid SPDX identifier', 'MIT'),
             'require' => ['php' => '>='.self::prompt('Minimum PHP version', '/^\d+\.\d+$/', 'PHP version must be in the format x.y', '8.2')],
             'authors' => [],
@@ -131,7 +131,6 @@ class Setup
     private static function error(string $errorMessage)
     {
         echo $errorMessage."\n";
-        exit(1);
     }
 
     public static function unlink()
