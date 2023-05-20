@@ -15,7 +15,7 @@ standards.
 
 ## Installation
 
-Use [Composer](https://getcomposer.org/) to install this template.
+Use [Composer](https://getcomposer.org/) to create a project from this template.
 
 ```bash
 composer create-project easifyphp/template
