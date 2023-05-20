@@ -17,7 +17,9 @@ class Setup
 
         $authorData = self::getAuthorData();
 
-        $composerJsonData['authors'][0] = $authorData;
+        if (!empty($authorData)) {
+            $composerJsonData['authors'][0] = $authorData;
+        }
 
         self::setAutoloadPaths($composerJsonData, $vendor, $package);
 
@@ -55,32 +57,30 @@ class Setup
         $authorName = self::getAuthorName();
         $authorEmail = self::getAuthorEmail();
 
-        return [
+        $result = [
             'name' => $authorName,
             'email' => $authorEmail,
         ];
+
+        if (empty($result['name'])) {
+            unset($result['name']);
+        }
+
+        if (empty($result['email'])) {
+            unset($result['email']);
+        }
+
+        return $result;
     }
 
     private static function getAuthorName(): string
     {
-        $authorName = self::prompt('Author name');
-
-        if (!preg_match('/^[a-zA-Z\s-]+$/', $authorName)) {
-            self::error('Author name must contain only [a-zA-Z] letters, spaces, and dashes');
-        }
-
-        return $authorName;
+        return self::prompt('Author name', '/^[a-zA-Z\s-]+$/', 'Author name must contain only [a-zA-Z] letters, spaces, and dashes', optional: true);
     }
 
     private static function getAuthorEmail(): string
     {
-        $authorEmail = self::prompt('Author email');
-
-        if (!filter_var($authorEmail, FILTER_VALIDATE_EMAIL)) {
-            self::error('Author email must be a valid email address');
-        }
-
-        return $authorEmail;
+        return self::prompt('Author email', '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/', 'Author email must be a valid email address', optional: true);
     }
 
     private static function setAutoloadPaths(array &$composerJsonData, string $vendor, string $package)
@@ -106,14 +106,20 @@ class Setup
     /**
      * Prompt for user input and validate using regex
      */
-    private static function prompt(string $question, ?string $regex = null, ?string $errorMessage = null, ?string $default = null): string
+    private static function prompt(string $question, ?string $regex = null, ?string $errorMessage = null, ?string $default = null, bool $optional = false): string
     {
         while (true) {
             echo $question.($default ? " [{$default}]" : '').': ';
             $input = trim(fgets(STDIN));
 
-            if (empty($input) && $default !== null) {
-                return $default;
+            if (empty($input)) {
+                if ($default !== null) {
+                    return $default;
+                }
+
+                if ($optional) {
+                    return '';
+                }
             }
 
             if ($regex && !preg_match($regex, $input)) {
