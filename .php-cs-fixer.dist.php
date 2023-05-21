@@ -246,6 +246,10 @@ return $config->setRiskyAllowed(true)
         'visibility_required' => ['elements' => ['method', 'property']],
         // In array declaration, there MUST be a whitespace after each comma.
         'whitespace_after_comma_in_array' => true,
+        // Putting blank lines between use statement groups.
+        'blank_line_between_import_groups' => true,
+        // All instances created with new keyword must be followed by braces.
+        'new_with_braces' => true,
     ])
     ->setFinder(PhpCsFixer\Finder::create()
         ->exclude([

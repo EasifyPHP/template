@@ -29,7 +29,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Easifyphp\\Template\\Test\\": "tests/"
+      "Easifyphp\\Template\\Tests\\": "tests/"
     }
   },
   "config": {
