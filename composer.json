@@ -19,7 +19,6 @@
     "jetbrains/phpstorm-attributes": "^1.0",
     "pestphp/pest": "^2.6",
     "roave/security-advisories": "dev-latest",
-    "symfony/var-dumper": "^6.2",
     "xheaven/composer-git-hooks": "^3.0"
   },
   "autoload": {
