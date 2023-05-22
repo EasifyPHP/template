@@ -250,6 +250,24 @@ return $config->setRiskyAllowed(true)
         'blank_line_between_import_groups' => true,
         // All instances created with new keyword must be followed by braces.
         'new_with_braces' => true,
+        // Converts simple usages of array_push($x, $y); to $x[] = $y;.
+        'array_push' => true,
+        // Comparisons should be strict.
+        'strict_comparison' => true,
+        // Classes must be in a path that matches their namespace, be at least one namespace deep and the class name should match the file name.
+        'psr_autoloading' => ['dir' => './src'],
+        // Adds or removes ? before type declarations for parameters with a default null value.
+        'nullable_type_declaration_for_default_null_value' => true,
+        // There should not be useless else cases.
+        'no_useless_else' => true,
+        // Imports should not be aliased as the same name.
+        'no_unneeded_import_alias' => true,
+        // There should not be any empty comments.
+        'no_empty_comment' => true,
+        // Imports or fully qualifies global classes/functions/constants.
+        'global_namespace_import' => true,
+        // Each line of multi-line DocComments must have an asterisk [PSR-5] and must be aligned with the first one.
+        'align_multiline_comment' => true,
     ])
     ->setFinder(PhpCsFixer\Finder::create()
         ->exclude([
