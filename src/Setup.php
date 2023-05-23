@@ -43,7 +43,15 @@ class Setup
 
     private static function getVendorAndPackage(string $packageName): array
     {
-        return array_map('ucfirst', explode('/', $packageName));
+        return array_map([self::class, 'transformName'], explode('/', $packageName));
+    }
+
+    private static function transformName(string $name): string
+    {
+        $name = str_replace(' ', '', $name);
+        $name = ucfirst($name);
+
+        return preg_replace_callback('/([-_]+)([a-z])/', static fn ($matches) => strtoupper($matches[2]), $name);
     }
 
     #[ArrayShape(['name' => 'string', 'type' => 'string', 'description' => 'string', 'license' => 'string', 'require' => 'string[]', 'authors' => 'array'])]
