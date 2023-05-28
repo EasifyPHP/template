@@ -62,7 +62,7 @@ class Setup
             'description' => self::prompt('Description'),
             'type' => self::prompt('Type', '/^[a-z0-9-]+$/', 'Type must be a valid composer package type', 'library'),
             'license' => self::prompt('License', '/^[a-zA-Z0-9\-.+]+$/', 'License must be a valid SPDX identifier', 'MIT'),
-            'require' => ['php' => '>='.self::prompt('Minimum PHP version', '/^\d+\.\d+$/', 'PHP version must be in the format x.y', '8.2')],
+            'require' => ['php' => '>=' . self::prompt('Minimum PHP version', '/^\d+\.\d+$/', 'PHP version must be in the format x.y', '8.2')],
             'authors' => [],
         ];
     }
@@ -102,10 +102,10 @@ class Setup
     private static function setAutoloadPaths(array &$composerJsonData, string $vendor, string $package)
     {
         $composerJsonData['autoload']['psr-4'] = [
-            $vendor.'\\'.$package.'\\' => 'src/',
+            $vendor . '\\' . $package . '\\' => 'src/',
         ];
         $composerJsonData['autoload-dev']['psr-4'] = [
-            $vendor.'\\'.$package.'\\Test\\' => 'tests/',
+            $vendor . '\\' . $package . '\\Test\\' => 'tests/',
         ];
     }
 
@@ -125,7 +125,7 @@ class Setup
     private static function prompt(string $question, ?string $regex = null, ?string $errorMessage = null, ?string $default = null, bool $optional = false): string
     {
         while (true) {
-            echo $question.($default ? " [{$default}]" : '').': ';
+            echo $question . ($default ? " [{$default}]" : '') . ': ';
             $input = trim(fgets(STDIN));
 
             if (empty($input)) {
@@ -151,7 +151,7 @@ class Setup
      */
     private static function error(string $errorMessage)
     {
-        echo $errorMessage."\n";
+        echo $errorMessage . "\n";
     }
 
     public static function unlink()
