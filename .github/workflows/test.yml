@@ -1,4 +1,4 @@
-name: Lint and Test
+name: Test
 
 on:
   pull_request:
@@ -33,9 +33,6 @@ jobs:
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
-
-      - name: PHP-CS-Fixer
-        run: composer fix:dry
 
       - name: PHPUnit
         run: composer test
