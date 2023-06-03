@@ -23,12 +23,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Easifyphp\\Template\\": "src/"
+      "EasifyPHP\\Template\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Easifyphp\\Template\\Tests\\": "tests/"
+      "EasifyPHP\\Template\\Tests\\": "tests/"
     }
   },
   "config": {
@@ -52,8 +52,8 @@
     "post-update-cmd": "cghooks update",
     "post-autoload-dump": "composer normalize",
     "post-create-project-cmd": [
-      "Easifyphp\\Template\\Setup::setup",
-      "Easifyphp\\Template\\Setup::unlink",
+      "EasifyPHP\\Template\\Setup::setup",
+      "EasifyPHP\\Template\\Setup::unlink",
       "@composer update"
     ],
     "fix": "php-cs-fixer fix --using-cache=no",
