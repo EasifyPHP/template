@@ -51,7 +51,7 @@ class Setup
         $name = str_replace(' ', '', $name);
         $name = ucfirst($name);
 
-        return preg_replace_callback('/([-_]+)([a-z])/', static fn ($matches) => strtoupper($matches[2]), $name);
+        return preg_replace_callback('/([-_]+)([a-zA-Z0-9])/', static fn ($matches) => strtoupper($matches[2]), $name);
     }
 
     #[ArrayShape(['name' => 'string', 'type' => 'string', 'description' => 'string', 'license' => 'string', 'require' => 'string[]', 'authors' => 'array'])]
