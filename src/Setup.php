@@ -1,6 +1,6 @@
 <?php
 
-namespace Easifyphp\Template;
+namespace EasifyPHP\Template;
 
 use JetBrains\PhpStorm\ArrayShape;
 

@@ -23,7 +23,7 @@ composer create-project easifyphp/template
 
 ## Usage
 
-After installing, replace the namespace `Easifyphp\Template` with the namespace you prefer. The source files should be
+After installing, replace the namespace `EasifyPHP\Template` with the namespace you prefer. The source files should be
 placed in the `src/` directory.
 
 The template includes [Faker](https://github.com/FakerPHP/Faker) for generating fake data in your tests or seed scripts.
