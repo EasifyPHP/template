@@ -31,6 +31,8 @@ class Setup
 
         $composerJsonData = [...$template, ...$composerJsonData];
 
+        self::checkDependencies($composerJsonData);
+
         self::removeUnwantedScripts($composerJsonData);
 
         self::writeComposerJson($composerJsonData);
@@ -62,7 +64,7 @@ class Setup
             'description' => self::prompt('Description'),
             'type' => self::prompt('Type', '/^[a-z0-9-]+$/', 'Type must be a valid composer package type', 'library'),
             'license' => self::prompt('License', '/^[a-zA-Z0-9\-.+]+$/', 'License must be a valid SPDX identifier', 'MIT'),
-            'require' => ['php' => '>=' . self::prompt('Minimum PHP version', '/^\d+\.\d+$/', 'PHP version must be in the format x.y', '8.2')],
+            'require' => ['php' => '>=' . self::promptForPHPVersion()],
             'authors' => [],
         ];
     }
@@ -107,6 +109,76 @@ class Setup
         $composerJsonData['autoload-dev']['psr-4'] = [
             $vendor . '\\' . $package . '\\Test\\' => 'tests/',
         ];
+    }
+
+    private static function promptForPHPVersion(): string
+    {
+        $minimumVersion = '8.1';
+
+        while (true) {
+            $input = self::prompt('Minimum PHP version', '/^\d+\.\d+$/', 'PHP version must be in the format x.y', $minimumVersion);
+
+            if (version_compare($input, $minimumVersion, '>=')) {
+                return $input;
+            }
+
+            self::error("PHP version must be {$minimumVersion} or higher");
+        }
+    }
+
+    private static function checkDependencies(array &$composerJsonData)
+    {
+        $packagesToCheck = [
+            'ergebnis/composer-normalize' => [
+                'config.allow-plugins.ergebnis/composer-normalize',
+                'extra.composer-normalize',
+                'scripts.post-autoload-dump',
+            ],
+            'fakerphp/faker' => [],
+            'friendsofphp/php-cs-fixer' => [
+                'scripts.fix',
+                'scripts.fix:dry',
+            ],
+            'jetbrains/phpstorm-attributes' => [],
+            'pestphp/pest' => [
+                'autoload-dev.psr-4.EasifyPHP\Template\Tests\\',
+                'config.allow-plugins.pestphp/pest-plugin',
+                'scripts.test',
+                'scripts.test:coverage',
+            ],
+            'roave/security-advisories' => [],
+            'xheaven/composer-git-hooks' => [
+                'scripts.post-install-cmd',
+                'scripts.post-update-cmd',
+                'extra.hooks',
+            ],
+        ];
+
+        foreach ($packagesToCheck as $package => $config) {
+            if (isset($composerJsonData['require'][$package]) || isset($composerJsonData['require-dev'][$package])) {
+                $remove = self::prompt("Do you need {$package}? [yes/no]", '/^yes|no$/', 'Please answer with "yes" or "no"', 'yes');
+                if (strtolower($remove) === 'no') {
+                    unset($composerJsonData['require'][$package], $composerJsonData['require-dev'][$package]);
+
+                    foreach ($config as $path) {
+                        $keys = explode('.', $path);
+                        self::unsetNestedKeys($composerJsonData, $keys);
+                    }
+                }
+            }
+        }
+    }
+
+    private static function unsetNestedKeys(array &$data, array $keys)
+    {
+        $current = &$data;
+        for ($i = 0; $i < count($keys) - 1; $i++) {
+            if (!isset($current[$keys[$i]])) {
+                return;
+            }
+            $current = &$current[$keys[$i]];
+        }
+        unset($current[end($keys)]);
     }
 
     private static function removeUnwantedScripts(array &$composerJsonData)
